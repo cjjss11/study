@@ -1,0 +1,293 @@
+민코딩
+st1 = list(input())
+st2 = list(input())
+st3 = list(input())
+st1.extend(st2)
+st1.extend(st3)
+
+for i in range(len(st1)):
+    st1[i] = ord(st1[i])
+bucket = [0]*90
+for i in range(len(st1)):
+    bucket[st1[i]] += 1
+flag = 0
+for i in range(1,len(bucket)):
+    if bucket[i] > 1:
+        flag = 1
+if flag:
+    print('No')
+else:
+    print('Perfect')
+---------------------------------------------------------------------
+lst = [[3,5,4],[1,1,2],[1,3,9]]
+y,x = map(int,input().split())
+direct_i = [0,0,-1,1]
+direct_j = [-1,1,0,0]
+sum = 0
+for i in range(4):
+    di = y + direct_i[i]
+    dj = x + direct_j[i]
+    if 0 <= di < 3 and 0 <= dj < 3:
+        sum += lst[di][dj]
+print(sum)
+---------------------------------------------------------------------
+map = [[3,3,5,3,1],[2,2,4,2,6],[4,9,2,3,4],[1,1,1,1,1],[3,3,5,9,2]]
+def getsum(a,b):
+    sum = 0
+    direct_i = [-1,-1,1,1]
+    direct_j = [-1,1,-1,1]
+    for i in range(4):
+        di = a + direct_i[i]
+        dj = b + direct_j[i]
+        if 0 <= di < 5 and 0 <= dj < 5:
+            sum += map[di][dj]
+    return sum
+maxvalue = int(-21e8)
+maxi = 0
+maxj = 0
+for i in range(5):
+    for j in range(5):
+        result = getsum(i,j)
+        if result > maxvalue:
+            maxvalue = result
+            maxi = i
+            maxj = j
+print(f'{maxi} {maxj}')
+---------------------------------------------------------------------
+Level 19 - 3번
+map_lst = [['_']*5 for _ in range(4)]
+y1,x1 = map(int,input().split())
+y2,x2 = map(int,input().split())
+direct_i = [-1,1,0,0,-1,-1,1,1]
+direct_j = [0,0,-1,1,-1,1,1,-1]
+for i in range(8):
+    di = y1 + direct_i[i]
+    dj = x1 + direct_j[i]
+    if 0 <= di < 4 and 0 <= dj < 5:
+        map_lst[di][dj] = '#'
+for i in range(8):
+    dy = y2 + direct_i[i]
+    dx = x2 + direct_j[i]
+    if 0 <= dy < 4 and 0 <= dx < 5:
+        map_lst[dy][dx] = '#'
+for i in map_lst:
+    for j in i:
+        print(j,end=' ')
+    print()
+---------------------------------------------------------------------
+vect = [[0]*3 for _ in range(4)]
+y1,x1 = map(int,input().split())
+y2,x2 = map(int,input().split())
+y3,x3 = map(int,input().split())
+y4,x4 = map(int,input().split())
+vect[y1][x1] = 5
+vect[y2][x2] = 5
+vect[y3][x3] = 5
+vect[y4][x4] = 5
+for i in vect:
+    for j in i:
+        print(j,end=' ')
+    print()
+---------------------------------------------------------------------
+image = [list(map(int,input().split())) for _ in range(4)]
+
+def rectSum(a,b):
+    sum = 0
+    for i in range(2):
+        for j in range(3):
+            sum += image[a+i][b+j]
+    return sum
+
+maxvalue = -21e8
+maxi = 0
+maxj = 0
+for i in range(3):
+    for j in range(2):
+        result = rectSum(i,j)
+        if result > maxvalue:
+            maxvalue = result
+            maxi = i
+            maxj = j
+print(f'({maxi},{maxj})')
+---------------------------------------------------------------------
+def main():
+    a = 1
+    b = 2
+    return id(a),id(b)
+def BBQ(a,b):
+    num = list(map(int,input().split()))
+    maxvalue = num[0]
+    minvalue = num[0]
+    for i in range(len(num)):
+        if num[i] > maxvalue:
+            maxvalue = num[i]
+        if num[i] < minvalue:
+            minvalue = num[i]
+        a = maxvalue
+        b = minvalue
+    print(f'a={a}')
+    print(f'b={b}')
+
+a,b = main()
+BBQ(a,b)
+---------------------------------------------------------------------
+Level19.5 - 2번
+lst = [list(map(int,input().split())) for _ in range(5)]
+direct_i = [-1,1,0,0,-1,-1,1,1]
+direct_j = [0,0,-1,1,-1,1,1,-1]
+
+def check(a,b):
+    for i in range(8):
+        di = a + direct_i[i]
+        dj = b + direct_j[i]
+        if 0 <= di < 5 and 0 <= dj < 4:
+            if lst[di][dj] == 1:
+                return 0
+    return 1
+flag = 0
+for i in range(5):
+    for j in range(4):
+        if lst[i][j] == 1:
+            result = check(i,j)
+            if result == 0:
+                flag = 1
+                break
+    if flag:
+        break
+
+if flag:
+    print('불안정한 상태')
+else:
+    print('안정된 상태')
+---------------------------------------------------------------------
+lst_input = list(map(int,input().split()))
+arr = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]
+lst = [[0]*4 for _ in range(4)]
+첫번째 방법
+def check(value):
+    num = 1
+    for i in range(4):
+        for j in range(4):
+            if arr[i][j] == value:
+                lst[i][j] = num
+                num += 1
+    return lst
+
+for i in range(len(lst_input)):
+    result = check(lst_input[i])
+print(result)
+두번째 방법
+num = 1
+for i in range(len(lst_input)):
+    for j in range(4):
+        for k in range(4):
+            if arr[j][k] == lst_input[i]:
+                lst[j][k] = num
+                num += 1
+for i in lst:
+    for j in i:
+        print(j,end=' ')
+    print()
+---------------------------------------------------------------------
+lst = [[0]*4 for _ in range(4)]
+st1, num1 = input().split()
+st2, num2 = input().split()
+st3, num3 = input().split()
+num1 = int(num1)
+num2 = int(num2)
+num3 = int(num3)
+for i in range(4):
+    if st1 == 'G':
+        lst[num1][i] = 1
+    elif st1 == 'S':
+        lst[i][num1] = 1
+for i in range(4):
+    if st2 == 'G':
+        lst[num2][i] = 1
+    elif st2 == 'S':
+        lst[i][num2] = 1
+for i in range(4):
+    if st3 == 'G':
+        lst[num3][i] = 1
+    elif st3 == 'S':
+        lst[i][num3] = 1
+for i in lst:
+    for j in i:
+        print(j,end=' ')
+    print()
+---------------------------------------------------------------------
+map = [['A','B','G','K'],['T','T','A','B'],['A','C','C','D']]
+pattern = [list(input()) for _ in range(2)]
+def ispattern(a,b):
+    for i in range(2):
+        for j in range(2):
+            if map[i+a][j+b] != pattern[i][j]:
+                return 0
+    return 1
+count = 0
+for i in range(2):
+    for j in range(3):
+        result = ispattern(i,j)
+        if result:
+            count +=1
+if count != 0:
+    print(f'발견({count}개)')
+else:
+    print('미발견')
+---------------------------------------------------------------------
+map_lst = [[3,5,1],[3,8,1],[1,1,5]]
+bitarray = [list(map(int,input().split())) for _ in range(2)]
+def masking(a,b):
+    sum = 0
+    for i in range(2):
+        for j in range(2):
+            if bitarray[i][j] == 1:
+                sum += map_lst[i+a][j+b]
+    return sum
+
+maxvalue = 0
+maxi = 0
+maxj = 0
+for i in range(2):
+    for j in range(2):
+        if bitarray[i][j] == 1:
+            result = masking(i,j)
+            if result > maxvalue:
+                maxvalue = result
+                maxi = i
+                maxj = j
+print(f'({maxi},{maxj})')
+
+---------------------------------------------------------------------
+st_input = list(input())
+st = list('GHOST')
+def checkstr(a):
+    for i in range(len(st)):
+        if st_input[i+a] != st[i]:
+            return 0
+    return 1
+count = 0
+for i in range(len(st)):
+    result = checkstr(i)
+    if result:
+        count += 1
+if count != 0:
+    print('존재')
+else:
+    print('존재하지 않음')
+---------------------------------------------------------------------
+SWEA
+import sys
+sys.stdin = open('s_input.txt','r')
+T = int(input())
+for test_case in range(1, T + 1):
+    N = int(input())
+    lst = list(map(int,input().split()))
+    maxvalue = lst[0]
+    minvalue = lst[0]
+    for i in lst:
+        if i > maxvalue:
+            maxvalue = i
+        if i < minvalue:
+            minvalue = i
+    print(f'#{test_case} {maxvalue-minvalue}')
