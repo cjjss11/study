@@ -1,0 +1,135 @@
+SW Expert Academy
+
+# 13700 (이진탐색 (list1))
+import sys
+sys.stdin = open('s_input.txt','r')
+T = int(input())
+for test_case in range(1, T + 1):
+    P, A, B = map(int,input().split())
+    left = 1
+    right = P
+    def binary_search_A(left,right,target):
+        count = 0
+        while 1:
+            c = int((left + right) // 2)
+            if target != c:
+                if c > target:
+                    right = c
+                if c < target:
+                    left = c
+            if target == c:
+                break
+            count += 1
+        return count
+
+    answerA = binary_search_A(left,P,A)
+    def binary_search_B(left,right,target):
+        count = 0
+        while 1:
+            c = int((left + right) // 2)
+            if target != c:
+                if c > target:
+                    right = c
+                if c < target:
+                    left = c
+            if target == c:
+                break
+            count += 1
+        return count
+    answerB = binary_search_B(left,P,B)
+    if answerA > answerB:
+        print(f'#{test_case} B')
+    elif answerA < answerB:
+        print(f'#{test_case} A')
+    elif answerA == answerB:
+        print(f'#{test_case} 0')
+
+---------------------------------------------------------------------
+#13699 (색칠하기) - 다시 풀어보기
+import sys
+sys.stdin = open('s_input.txt','r')
+T = int(input())
+for test_case in range(1, T + 1):
+    arr = [[0]*10 for _ in range(10)]
+    N = int(input()) # 칠할 영역의 개수
+    lst = [list(map(int,input().split())) for _ in range(N)]
+    def color(a):
+        count = 0
+        for i in range(lst[a][0],lst[a][2]+1):
+                for j in range(lst[a][1],lst[a][3]+1):
+                    arr[i][j] += lst[a][-1]
+        for i in range(10):
+            for j in range(10):
+                if arr[i][j] == 3:
+                    count += 1
+        return count
+
+    for i in range(N):
+        result = color(i)
+    print(f'#{test_case} {result}')
+---------------------------------------------------------------------
+# 1209 [S/W 문제해결 기본] 2일차 - Sum
+import sys
+sys.stdin = open('s_input.txt','r')
+T = 10
+for test_case in range(1, T + 1):
+    T1 = int(input())
+    lst = [list(map(int,input().split())) for _ in range(100)]
+    arr = []
+    for i in range(100):
+        row_sum = 0
+        for j in range(100):
+            row_sum += lst[i][j]
+        arr.append(row_sum)
+    for i in range(100):
+        column_sum = 0
+        for j in range(100):
+            column_sum += lst[j][i]
+        arr.append(column_sum)
+    cross1_sum = 0
+    for i in range(100):
+        for j in range(100):
+            if i == j:
+                cross1_sum += lst[i][j]
+    arr.append(cross1_sum)
+    cross2_sum = 0
+    for i in range(100):
+        for j in range(99,-1,-1):
+            if i + j == 99:
+                cross2_sum += lst[i][j]
+    arr.append(cross2_sum)
+    maxvalue = arr[0]
+    for i in arr:
+        if i > maxvalue:
+            maxvalue = i
+    print(f'#{test_case} {maxvalue}')
+---------------------------------------------------------------------
+# 1208 [S/W 문제해결 기본] 1일차 - Flatten
+import sys
+sys.stdin = open(&quot;input.txt&quot;, &quot;r&quot;)
+T = int(input())
+for test_case in range(1, T + 1):
+
+    
+dump_range = int(input())
+dump_lst = list(map(int,input().split()))
+maxvalue = dump_lst[0]
+minvalue = dump_lst[0]
+n = 1
+min_idx = 0
+max_idx = 0
+while n < dump_range+1:
+    for j in range(len(dump_lst)):
+        if maxvalue < dump_lst[j]:
+            maxvalue = dump_lst[j]
+            max_idx = j
+        if minvalue > dump_lst[j]:
+            minvalue = dump_lst[j]
+            min_idx = j
+    maxvalue = maxvalue - 1
+    dump_lst[max_idx] = maxvalue
+    minvalue = minvalue + 1
+    dump_lst[min_idx] = minvalue
+    n += 1
+
+print(f&apos;{maxvalue},{minvalue})
