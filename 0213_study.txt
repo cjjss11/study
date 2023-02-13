@@ -1,0 +1,117 @@
+# 색칠하기
+import sys
+sys.stdin = open('s_input.txt','r')
+T = int(input())
+for test_case in range(1, T + 1):
+    N = int(input())
+    arr = [[0]*10 for _ in range(10)]
+    for i in range(N):
+        dy1,dx1,dy2,dx2,color = map(int,input().split())
+        for i in range(dy1,dy2+1):
+            for j in range(dx1,dx2+1):
+                arr[i][j] += color
+    count = 0
+    for i in arr:
+        for j in i:
+            if j == 3:
+                count += 1
+    print(f'#{test_case} {count}')
+# ----------------------------------------------------------------------
+# 파리퇴치 3
+import sys
+sys.stdin = open('s_input.txt','r')
+T = int(input())
+for test_case in range(1, T + 1):
+    N,M = map(int,input().split())
+    arr = [list(map(int,input().split())) for _ in range(N)]
+    def direct_sum(a,b):
+        direct_i = [-1,1,0,0]
+        direct_j = [0,0,-1,1]
+        sum1 = 0
+        for i in range(4):
+            for j in range(1,M):
+                di = a + direct_i[i] * j
+                dj = b + direct_j[i] * j
+                if 0 <= di < N and 0 <= dj < N:
+                    sum1 += arr[di][dj]
+        sum1 += arr[a][b]
+        return sum1
+    def cross_sum(a,b):
+        cross_i = [-1,-1,1,1]
+        cross_j = [-1,1,-1,1]
+        sum2 = 0
+        for i in range(4):
+            for j in range(1,M):
+                di = a + cross_i[i] * j
+                dj = b + cross_j[i] * j
+                if 0 <= di < N and 0 <= dj < N:
+                    sum2 += arr[di][dj]
+        sum2 += arr[a][b]
+        return sum2
+
+    maxvalue1 = 0
+    maxvalue2 = 0
+    for i in range(N):
+        for j in range(N):
+            result1 = direct_sum(i,j)
+            result2 = cross_sum(i,j)
+            if result1 > maxvalue1:
+                maxvalue1 = result1
+            if result2 > maxvalue2:
+                maxvalue2 = result2
+    if maxvalue1 > maxvalue2:
+        print(f'#{test_case} {maxvalue1}')
+    else:
+        print(f'#{test_case} {maxvalue2}')
+# ----------------------------------------------------------------------
+# 민코딩 20.5 - 6번
+lst = list(map(int,input().split()))
+for i in range(1,5):
+    for j in range(0,i+2+1):
+        print(lst[j],end=' ')
+    print()
+# ----------------------------------------------------------------------
+# 민코딩 20.5 - 7번
+st = list(input())
+for i in range(len(st)):
+    for j in range(0,i+1):
+        print(st[j],end='')
+    print()
+# ----------------------------------------------------------------------
+# 민코딩 20.5 - 8번
+lst1 = list(map(int,input().split()))
+lst2 = list(map(int,input().split()))
+result = []
+for i in range(4):
+    for j in range(4):
+        if lst1[i] > lst2[j]:
+            lst1[i],lst2[j] = lst2[j],lst1[i]
+        elif lst1[i] == lst2[j]:
+
+print(*lst1)
+print(*lst2)
+# ----------------------------------------------------------------------
+# 전기버스
+import sys
+sys.stdin = open('s_input.txt','r')
+T = int(input())
+for test_case in range(1, T + 1):
+    K,N,M = map(int,input().split())
+    charge_lst = list(map(int,input().split()))
+    current = 0
+    count = 0
+    while current + K < N:
+        for i in range(1,len(charge_lst)):
+            if current + K >= N:
+                break
+            if current + K == charge_lst[i]:
+                current = charge_lst[i]
+                count += 1
+            elif current + K != charge_lst[i]:
+                if charge_lst[i] - charge_lst[i-1] > K:
+                    count = 0
+                    current = N
+                elif charge_lst[i] - charge_lst[i-1] < K:
+                    current = charge_lst[i]
+                    count += 1
+    print(f'#{test_case} {count}')
