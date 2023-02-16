@@ -1,0 +1,476 @@
+# 반 강의
+
+# 숫자 하나씩 선택하여 합이 20이 넘는 경우 몇가지인지 출력
+arr = [[4,5,2],[-2,1,6],[3,9,-4],[3,5,2]]
+count = 0
+def abc(level,sum):
+    global count
+    if level == 4:
+        if sum > 20:
+            count += 1
+        return
+    for i in range(3):
+        abc(level+1,sum+arr[level][i])
+abc(0,0)
+print(count)
+
+---------------------------------------------------------------------
+
+# 숫자 하나씩 선택하여 곱했을 때 최댓값 출력
+arr = [[3,5,9],[7,-8,1],[-10,2,3],[5,1,2]]
+maxvalue = -21e8
+def dfs(level,gop):
+    global maxvalue
+    if level == 4:
+        if gop > maxvalue:
+            maxvalue = gop
+        return
+    for i in range(3):
+        dfs(level+1,gop*arr[level][i])
+dfs(0,1)
+print(maxvalue)
+
+---------------------------------------------------------------------
+
+# 합이 30보다 큰 경우가 몇가지인지 출력
+arr = [[3,5,9,6],[7,-8,1,6],[-10,2,3,9],[5,1,2,8],[4,7,1,8]]
+count = 0
+def dfs(now,level,sum):
+    global count
+    if level == 5:
+        if sum > 30:
+            count += 1
+        return
+
+    for i in range(3):
+        direct = [-1,0,1]
+        dy = level
+        dx = now + direct[i]
+        if 0 <= dx < 4:
+            dfs(dx,level + 1, sum + arr[dy][dx])
+for i in range(4):
+    dfs(i,1,arr[0][i])
+print(count)
+
+---------------------------------------------------------------------
+
+# 미로찾기
+# (0,0)에서 출발해서 (3,3)까지 도착하고자 할 때 목표에 도착이 가능한지 불가능한지 출력
+arr = [[0,0,0,0],
+       [1,0,1,0],
+       [1,0,1,0],
+       [0,0,0,0]]
+used = [[0]*4 for _ in range(4)]
+direct_i = [-1,1,0,0]
+direct_j = [0,0,-1,1]
+flag = 0
+def dfs(y,x):
+    global flag
+    if y == 3 and x == 3:
+        flag = 1
+        return
+    for i in range(4):
+        di = y + direct_i[i]
+        dj = x + direct_j[i]
+        if 0 <= di < 4 and 0 <= dj < 4:
+            if arr[di][dj] == 1:
+                continue
+            if used[di][dj] == 1:
+                continue
+            used[di][dj] = 1
+            dfs(di,dj)
+            if flag == 1:
+                return
+used[0][0] = 1
+dfs(0,0)
+if flag == 1:
+    print('도착 가능')
+else:
+    print('도착 불가능')
+
+arr = [[0, 0, 0, 0],
+       [1, 0, 1, 0],
+       [1, 0, 1, 0],
+       [0, 0, 0, 0]]
+used = [[0]*4 for _ in range(4)]
+direct_i = [-1,1,0,0]
+direct_j = [0,0,-1,1]
+flag = 0
+def dfs(y,x):
+    global flag
+    if y == 3 and x == 3:
+        flag = 1
+        return
+    for i in range(4):
+        di = y + direct_i[i]
+        dj = x + direct_j[i]
+        if 0 <= di < 4 and 0 <= dj < 4:
+            if arr[di][dj] == 1:
+                continue
+            if used[di][dj] == 0:
+                used[di][dj] = 1
+                dfs(di,dj)
+used[0][0] = 1
+dfs(0,0)
+if flag == 1:
+    print('도착 가능')
+else:
+    print('도착 불가능')
+
+---------------------------------------------------------------------
+# 별(1,3)까지 가는 최단 거리 출력
+
+# 1. level을 사용해서 풀기
+arr = [[0, 0, 0, 0, 1],
+       [1, 0, 1, 0, 1],
+       [1, 0, 1, 0, 1],
+       [1, 0, 1, 0, 1],
+       [0, 0, 0, 0, 0]]
+used = [[0]*5 for _ in range(5)]
+direct_i = [-1,1,0,0]
+direct_j = [0,0,-1,1]
+minvalue = 21e8
+def dfs(y,x,level):  # count대신 level로 최단 경로를 구하면 됨
+    global minvalue
+    if y == 1 and x == 3:
+        if minvalue > level:
+            minvalue = level
+        return
+    for i in range(4):
+        di = y + direct_i[i]
+        dj = x + direct_j[i]
+        if 0 <= di < 5 and 0 <= dj < 5:
+            if arr[di][dj] == 1:
+                continue
+            if used[di][dj] == 0:
+                used[di][dj] = 1
+                dfs(di,dj,level+1)
+                used[di][dj] = 0
+used[0][0] = 1
+dfs(0,0,0)
+print(minvalue)
+
+# 2. count를 사용해서 풀기
+arr = [[0, 0, 0, 0, 1],
+       [1, 0, 1, 0, 1],
+       [1, 0, 1, 0, 1],
+       [1, 0, 1, 0, 1],
+       [0, 0, 0, 0, 0]]
+used = [[0]*5 for _ in range(5)]
+direct_i = [-1,1,0,0]
+direct_j = [0,0,-1,1]
+minvalue = 21e8
+count = 0
+def dfs(y,x):
+    global minvalue,count
+    if y == 1 and x == 3:
+        if minvalue > count:
+            minvalue = count
+        return
+    for i in range(4):
+        di = y + direct_i[i]
+        dj = x + direct_j[i]
+        if 0 <= di < 5 and 0 <= dj < 5:
+            if arr[di][dj] == 1:
+                continue
+            if used[di][dj] == 0:
+                used[di][dj] = 1
+                count += 1
+                dfs(di,dj)
+                used[di][dj] = 0
+                count -= 1
+used[0][0] = 1
+dfs(0,0)
+print(minvalue)
+
+# =====================================================================
+
+# 민코딩 22.5 - 5번
+st1, st2 = input().split()
+st1 = ord(st1)
+st2 = int(st2)
+index = 0
+di = 0
+MAP = [[3,5,4,2,2,3],[1,3,3,3,4,2],[5,4,4,2,3,5]]
+price = ['T','P','G','K','C']
+for i in range(65,68):
+    if i == st1:
+        i = i - 65
+        di = i
+        break
+for j in range(6):
+    if j+1 == st2:
+        index = MAP[di][j]
+        break
+print(price[index-1])
+
+----------------------------------------------------------------------------------------
+
+# 민코딩 21 - 2번
+lst = ['qlqlaqkq','tkaruqtkf']
+ID = input()
+PASSWORD = input()
+if ID in lst and PASSWORD in lst:
+    print('LOGIN')
+else:
+    print('INVALID')
+
+----------------------------------------------------------------------------------------
+# 민코딩 21 - 5번
+lst = [input().split() for _ in range(3)]
+len_lst = []
+maxvalue = -21e8
+index = 0
+for i in range(3):
+    len_lst.append(len(lst[i][0]))
+for i in range(len(len_lst)):
+    if len_lst[i] > maxvalue:
+        maxvalue = len_lst[i]
+        index = i
+temp = lst[0][0]
+lst[0][0] = lst[index][0]
+lst[index][0] = temp
+for i in range(3):
+    for j in range(len(lst[i][0])):
+        print(lst[i][0][j],end='')
+    print()
+
+----------------------------------------------------------------------------------------
+
+# 민코딩 22 - 6번
+lst = []
+for i in range(4):
+    lst.append(input())
+maxvalue = -21e8
+minvalue = 21e8
+maxi = 0
+mini = 0
+for i in range(4):
+    for j in range(len(lst[i])):
+        if len(lst[i]) > maxvalue:
+            maxvalue = len(lst[i])
+            maxi = i
+        if len(lst[i]) < minvalue:
+            minvalue = len(lst[i])
+            mini = i
+print(f'긴문장:{maxi}')
+print(f'짧은문장:{mini}')
+
+----------------------------------------------------------------------------------------
+
+# 민코딩 22 - 7번
+lst = ['A','B','C','D']
+path = [0]*4
+result = []
+answer = 0
+def abc(level):
+    if level == 3:
+        result.append(lst[level])
+        return
+    for i in range(4):
+        path[level] = lst[i]
+        abc(level+1)
+abc(0)
+print(result)
+
+----------------------------------------------------------------------------------------
+
+# 민코딩 22.5 - 7번
+lst = [[['','#',''],['#','','#'],['#','#','#'],['#','','#'],['#','','#']],
+       [['#','#','#'],['#','','#'],['#','#','#'],['#','','#'],['#','#','#']],
+       [['#','#','#'],['#','','#'],['#','',''],['#','','#'],['#','#','#']],
+       [['#','#',''],['#','','#'],['#','','#'],['#','','#'],['#','#','']]]
+num = int(input())
+for i in range(5):
+    for j in range(3):
+        if lst[num][i][j] != '#':
+            print(end=' ')
+        print(lst[num][i][j],end='')
+    print()
+
+----------------------------------------------------------------------------------------
+# 민코딩 21.5 - 1번
+lst = [input().split() for _ in range(4)]
+di_A = 0
+dj_A = 0
+di_B = 0
+dj_B = 0
+for i in range(4):
+    for j in range(3):
+        if lst[i][0][j] == 'A':
+            di_A = i
+            dj_A = j
+        if lst[i][0][j] == 'B':
+            di_B = i
+            dj_B = j
+print(f'{abs(di_B-di_A)+abs(dj_B-dj_A)}')
+
+----------------------------------------------------------------------------------------
+
+# 민코딩 21.5 - 3번
+st_lst = input().split()
+st1,st2 = input().split()
+for i in range(len(st_lst[0])):
+    if st_lst[0][i] == st1:
+        st_lst[0][i] = '#'
+        st_lst[0][i] = '#'
+    if st_lst[0][i] == st2:
+        st_lst[0][i] = '#'
+    print(st_lst[0][i],end='')
+print(st_lst[0][1])
+
+----------------------------------------------------------------------------------------
+
+# 민코딩 21.5 - 5번
+vect = list(map(int,input().split()))
+bucket = [0]*10
+str_lst = []
+for i in range(len(vect)):
+    bucket[vect[i]] += 1
+index = 0
+for i in range(len(bucket)):
+    if bucket[i] != 0:
+        index = i
+        str_lst.append(str(index)*bucket[i])
+for i in range(len(str_lst)):
+    print(str_lst[i],end=' ')
+
+----------------------------------------------------------------------------------------
+
+# 민코딩 22.5 - 6번
+arr = [input().split() for _ in range(4)]
+lst = []
+for i in range(4):
+    lst.append(arr[i][0])
+lst.sort(key=lambda x:len(x))
+for i in range(len(lst)):
+    print(lst[i])
+print()
+
+----------------------------------------------------------------------------------------
+
+# 민코딩 23 - 1번
+st = list(input())
+path = [0]*4
+used = [0]*4
+def dfs(level):
+    if level == 3:
+        for i in range(3):
+            print(path[i],end='')
+        print()
+        return
+    for i in range(4):
+        path[level] = st[i]
+        if used[i] == 0:
+            used[i] = 1
+            dfs(level+1)
+            used[i] = 0
+dfs(0)
+
+----------------------------------------------------------------------------------------
+# 민코딩 23 - 2번
+st = list(input())
+path = [0]*4
+count = 0
+def abc(level):
+    global count
+    if level == 4:
+        count += 1
+        return
+    for i in range(4):
+        path[level] = st[i]
+        if level > 0 and path[level-1] == 'B' and path[level] == 'T':
+            continue
+        if level > 0 and path[level-1] == 'T' and path[level] == 'B':
+            continue
+        abc(level+1)
+
+abc(0)
+print(count)
+
+----------------------------------------------------------------------------------------
+
+# 민코딩 23 - 3번
+n = int(input())
+lst = ['A','B','C']
+path = [0]*100
+count = 0
+def abc(level):
+    global count
+    if level == n:
+        count += 1
+        return
+    for i in range(3):
+        if level > 1 and path[level-2] == path[level-1] == lst[i]:
+            continue
+        path[level] = lst[i]
+        abc(level+1)
+abc(0)
+print(count)
+
+----------------------------------------------------------------------------------------
+
+# 민코딩 23 - 4번
+lst = ['B','T','S','K','R']
+path = [0]*5
+used = [0]*5
+n = int(input())
+count = 0
+def abc(level):
+    global count
+    if level == n:
+        if 'S' in path:
+            count += 1
+        return
+    for i in range(5):
+        path[level] = lst[i]
+        if used[i] == 0:
+            used[i] = 1
+            abc(level+1)
+            used[i] = 0
+abc(0)
+print(count)
+
+----------------------------------------------------------------------------------------
+
+# 민코딩 23 - 5번
+lst = ['E','W','A','B','C']
+st = input()
+path = [0]*5
+used = [0]*5
+def abc(level):
+    # if st in path:
+    #     return
+    if level == 4:
+        for i in range(4):
+            print(path[i],end='')
+        print()
+        return
+    for i in range(5):
+        if lst[i] == st:
+            continue
+        path[level] = lst[i]
+        if used[i] == 0:
+            used[i] = 1
+            abc(level+1)
+            used[i] = 0
+abc(0)
+
+----------------------------------------------------------------------------------------
+
+# 민코딩 23 - 6번
+lst = list(map(int,input()))
+path = [0]*5
+count = 0
+def abc(level):
+    global count
+    if level == 4:
+        count += 1
+        return
+    for i in range(5):
+        if level > 0 and abs(path[level-1]-path[level]) > 3:
+            continue
+        path[level] = lst[i]
+        abc(level+1)
+abc(0)
+print(count)
