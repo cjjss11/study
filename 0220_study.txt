@@ -1,0 +1,291 @@
+stack = [0]*3
+top = -1
+def push(item):
+    global top
+    top += 1
+    if top == 3:
+        print('overflow')
+    else:
+        stack[top] = item
+push(10)
+top += 1
+stack[top] = 20
+top += 1
+stack[top] = 30
+
+def pop():
+    global top
+    if top == -1:
+        return 0
+    else:
+        top -= 1
+        return stack[top+1]
+print(pop())
+if top > -1:
+    top -= 1
+    print(stack[top+1])
+if top > -1:
+    top -= 1
+    print(stack[top+1])
+
+lst = ['(','(',')','(','(',')',')',')']
+stack = []
+def check():
+    for i in lst:
+        if i == '(':
+            stack.append(i)
+        elif i == ')':
+            if len(stack) == 0:
+                return 0
+            else:
+                pair = stack.pop()
+                if i == ')' and pair != '(':
+                    return 0
+    if len(stack) > 0:
+        return 0
+result = check()
+if result == 0:
+    print('NO')
+else:
+    print('YES')
+
+------------------------------------------------------------------------
+
+import sys
+sys.stdin = open('input.txt','r')
+T = int(input())
+for test_case in range(1, T + 1):
+    N = int(input())
+    arr = [list(map(int,input().split())) for _ in range(N)]
+    direct_i = [-1,-1,-1,0,1,1,1,0]
+    direct_j = [-1,0,1,1,1,0,-1,-1]
+    def check(a,b):
+        count1 = 0
+        maxvalue1 = -21e8
+        answer = 0
+        for i in range(8):
+            di = a + direct_i[i]
+            dj = b + direct_j[i]
+            if 0 <= di < N and 0 <= dj < N:
+                if arr[a][b] > arr[di][dj]:
+                    return 0
+                else:
+                    if arr[di][dj] > maxvalue1:
+                        maxvalue1 = arr[di][dj]
+                        answer = maxvalue1 - arr[di][dj]
+                    count1 += 1
+        if count1 == 8:
+            return answer
+        else:
+            return 0
+    count2 = 0
+    maxvalue2 = -21e8
+    for i in range(N):
+        for j in range(N):
+            result = check(i,j)
+            if result != 0:
+                count2 += 1
+                if result > maxvalue2:
+                    maxvalue2 = result
+    print(f'#{test_case} {count2} {maxvalue2}')
+
+------------------------------------------------------------------------
+
+# SW Expert Academy
+
+# 1946 - 간단한 압출 풀기
+# 1. lst로 해서 A, B, C 구분해서 출력
+import sys
+sys.stdin = open('input.txt','r')
+T = int(input())
+for test_case in range(1, T + 1):
+    lst = []
+    N = int(input())
+    for i in range(N):
+        st,num = input().split()
+        num = int(num)
+        lst.append(st*num)
+    print(f'#{test_case}')
+    for i in range(N):
+        for j in range(0,len(lst),10):
+            print(lst[i][j:j+10])
+
+# 2. 문자열로 합친 후 10개 단위로 출력
+import sys
+sys.stdin = open('input.txt','r')
+T = int(input())
+for test_case in range(1, T + 1):
+    st = ''
+    N = int(input())
+    for i in range(N):
+        a,num = input().split()
+        num = int(num)
+        st += a*num
+    print(f'#{test_case}')
+    for i in range(0,len(st),10):
+            print(st[i:i+10])
+
+------------------------------------------------------------------------
+
+# 13761 - 가장 빠른 문자열 타이핑
+import sys
+sys.stdin = open('input.txt','r')
+T = int(input())
+for test_case in range(1, T + 1):
+    A,B = input().split()
+    def check(a):
+        for i in range(len(B)):
+            if A[i+a] != B[i]:
+                return 0
+        return 1
+    count1 = 0
+    count2 = 0
+    for i in range(len(A)-len(B)+1):
+        result = check(i)
+        if result != 0:
+            count1 += 1
+    st = A.replace(B,'')
+    for i in st:
+        count2 += 1
+    print(f'#{test_case} {count1+count2}')
+
+------------------------------------------------------------------------
+
+# [S/W 문제해결 기본] 5일차 - GNS
+import sys
+sys.stdin = open('input.txt','r')
+T = int(input())
+for test_case in range(1, T + 1):
+    st1,N = input().split()
+    N = int(N)
+    lst = input().split()
+    str_lst = ['ZRO', 'ONE', 'TWO', 'THR', 'FOR', 'FIV', 'SIX', 'SVN', 'EGT', 'NIN']
+    def change_num(a):
+        for i in range(len(str_lst)):
+            if lst[a] == str_lst[i]:
+                lst[a] = i
+        return lst[a]
+    arr1 = []
+    for i in range(len(lst)):
+        result = change_num(i)
+        arr1.append(result)
+    arr1.sort()
+    def change_str(a):
+        for i in range(10):
+            if arr1[a] == i:
+                arr1[a] = str_lst[i]
+        return arr1[a]
+    arr2 = []
+    for i in range(len(arr1)):
+        result = change_str(i)
+        arr2.append(result)
+    print(f'#{test_case}')
+    print(*arr2)
+
+------------------------------------------------------------------------
+
+# 13740 - 회문(String)
+import sys
+sys.stdin = open('input.txt','r')
+# T = int(input())
+# for test_case in range(1, T + 1):
+N, M = map(int,input().split())
+arr1 = [input() for _ in range(N)]
+arr2 = []
+for i in range(N):
+    lst = []
+    for j in range(N):
+        lst.append(arr1[j][i])
+    arr2.append(lst)
+def check(a,b):
+    for j in range(M):
+        if arr1[a][b+j] != arr1[a][::-1][j]:
+            return 0
+        # if arr2[a+j][b] != arr2[a][::-1][j]:
+        #     return 0
+    return 1
+for i in range(N):
+    for j in range(N-(M//2)+1):
+        result = check(i,j)
+        if result:
+            for k in range(j,j+M):
+                print(arr1[i][k],end='')
+                # print(arr2[i][k], end='')
+# print(arr1[9])
+# print(arr1[9][::-1])
+# print(arr2[9])
+# print(arr1[9][::-1][0])
+
+------------------------------------------------------------------------
+
+# 민코딩 28 - 3번
+family = ['A','B','H','C','D','G','E','F']
+arr = [[0,1,1,1,0,0,0,0],
+       [0,0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0,0],
+       [0,0,0,0,1,1,1,0],
+       [0,0,0,0,0,0,0,1],
+       [0,0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0,0]]
+st = input()
+index1 = 0 # 입력 인덱스
+index2 = 0 # 부모 인덱스
+flag = 0
+answer = []
+for i in range(len(family)):
+    if family[i] == st:
+        index1 = i
+for i in range(8):
+    if arr[i][index1] == 1:
+        index2 = i
+        flag = 1
+        break
+if flag == 0:
+    print('없음')
+else:
+    for i in range(8):
+        if arr[index2][i] == 1:
+            if i != index1:
+                answer.append(i)
+    if len(answer) == 0:
+        print('없음')
+    else:
+        for i in answer:
+            print(family[i],end=' ')
+
+------------------------------------------------------------------------
+
+# 민코딩 28 - 4번
+N = int(input())
+lst = [0,1,2,3,4,5,6]
+arr = [list(map(int,input().split())) for _ in range(N)]
+path = []
+def dfs(now):
+    path.append(lst[now])
+    if now == N-1:
+        return
+    for i in range(N):
+        if arr[now][i] == 1:
+            dfs(i)
+dfs(0)
+print(*path)
+
+------------------------------------------------------------------------
+
+# 민코딩 28 - 5번
+N = int(input())
+lst = [0,1,2,3,4,5,6,7,8]
+arr = [list(map(int,input().split())) for _ in range(N)]
+path = []
+def dfs(level,now):
+    if level == 2 and now == 8:
+        for i in range(2):
+            print(path[i],end=' ')
+        print()
+        return
+    for i in range(N):
+        if arr[now][i] == 1:
+            path[level] = lst[i]
+            dfs(level+1,i)
+dfs(0,0)
