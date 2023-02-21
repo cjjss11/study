@@ -1,0 +1,441 @@
+민코딩 28 - 2번
+n = int(input())
+arr = [list(map(int,input().split())) for _ in range(n)]
+lst = [0,1,2,3,4,5,6]
+boss_i = 0
+HS = 0
+HS_under = []
+for i in range(n):
+    if arr[i][HS] == 1:
+        boss_i = i
+print(f'boss:{boss_i}')
+for i in range(n):
+    if arr[HS][i] == 1:
+        HS_under.append(i)
+print('under:',end='')
+for i in range(len(HS_under)):
+    print(HS_under[i],end=' ')
+
+--------------------------------------------------------------------------------------
+
+민코딩 29 - 2번
+lst = [1,2,3,4,5,6]
+arr = [[0,0,1,0,1,1],
+       [1,0,0,1,0,0],
+       [0,0,0,0,1,0],
+       [1,0,0,0,0,0],
+       [1,0,0,0,0,0],
+       [0,0,0,0,0,0]]
+used = [0]*6
+count = 0
+flag = 0
+A, B = map(int,input().split())
+def dfs(now):
+    global count,flag
+    if lst[now] == B:
+        print(count)
+        return
+    for i in range(6):
+        if arr[now][i] == 1:
+            if used[i] == 0:
+                used[i] = 1
+                count += 1
+                dfs(i)
+                count -= 1
+            break
+        elif arr[now][i] == 0 and lst[i] == B:
+            flag = 1
+
+index = 0
+for i in range(len(lst)):
+    if lst[i] == A:
+        index = i
+        break
+used[index] = 1
+dfs(index)
+
+--------------------------------------------------------------------------------------
+
+민코딩 29.5 - 2번
+evid = [-1,0,0,1,2,4,4]
+timeStamp = [8,3,5,6,8,9,10]
+index = int(input())
+def abc(now,clock):
+    if evid[now] == -1:
+        print(f'{now}번index(출발)')
+        return
+    abc(evid[now],timeStamp[evid[now]])
+    print(f'{now}번index({clock}시)')
+abc(index,timeStamp[index])
+
+--------------------------------------------------------------------------------------
+민코딩 29.5 - 3번
+arr = [list(map(int,input().split())) for _ in range(3)]
+for i in range(3):
+    if arr[i][0] == arr[i][1] == arr[i][2]:
+        print(arr[i][0])
+    else:
+        print('x')
+
+--------------------------------------------------------------------------------------
+
+민코딩 29.5 - 4번 (다시 풀기!!!!!!)
+lst1 = list(map(int,input().split()))
+lst2 = list(map(int,input().split()))
+# result = []
+# for i in range(4):
+#     for j in range(4):
+#         if lst1[i] > lst2[j]:
+#             result.append(lst2[j])
+#         else:
+#             result.append(lst1[i])
+lst1.extend(lst2)
+for i in range(7):
+    for j in range(i+1,8):
+        if lst1[i] > lst1[j]:
+            lst1[i],lst1[j] = lst1[j],lst1[i]
+print(*lst1)
+
+--------------------------------------------------------------------------------------
+
+민코딩 29.5 - 5번
+arr = [list(map(int,input().split())) for _ in range(4)]
+direct_i = []
+direct_j = []
+for i in range(4):
+    for j in range(5):
+        if arr[i][j] == 1:
+            direct_i.append(i)
+            direct_j.append(j)
+print(f'({direct_i[0]},{direct_j[0]})')
+print(f'({direct_i[-1]},{direct_j[-1]})')
+
+--------------------------------------------------------------------------------------
+
+민코딩 29.5 - 6번
+arr = [[3,2,5,3],[7,6,1,6],[4,9,2,7]]
+lst = list(map(int,input().split()))
+for j in range(4):
+    temp = arr[-1][j]
+    if lst[j] == 1:
+        for i in range(2,0,-1):
+            arr[i][j] = arr[i-1][j]
+        arr[0][j] = temp
+    elif lst[j] == 2:
+        for i in range(2,0,-1):
+            arr[i][j] = arr[i-1][j]
+        arr[0][j] = temp
+        temp = arr[-1][j]
+        for i in range(2,0,-1):
+            arr[i][j] = arr[i-1][j]
+        arr[0][j] = temp
+
+for i in arr:
+    for j in i:
+        print(j,end='')
+    print()
+
+--------------------------------------------------------------------------------------
+
+민코딩 29.5 - 1번
+n = int(input())
+lst = [3,1,2,1,3,2,1,2,1]
+# lst = ['시작',3,1,2,1,3,2,1,2,1,'도착']
+# lst = [0,3,1,2,1,3,2,1,2,1,0]
+# lst[0] = '시작'
+# lst[-1] = '도착'
+def abc(level):
+    if level >= len(lst):
+        print('도착',end=' ')
+        return
+
+    print(lst[level-1],end=" ")
+    abc(level+lst[level-1])
+    print(lst[level-1],end=" ")
+print('시작',end=' ')
+abc(n)
+print('시작',end=' ')
+
+--------------------------------------------------------------------------------------
+민코딩 29.5 - 7번
+index,life = map(int,input().split())
+lst = [0,1,2,3,4]
+for i in range(len(lst)):
+    result = ['_', '_', '_', '_', '_']
+    if life == 0:
+        for i in range(len(result)):
+            print(result[i],end='')
+        break
+    elif life != 0:
+        if index > len(lst) - 1:
+            break
+    result[index] = life
+    if result[i] != life:
+        continue
+    elif result[i] == life:
+        index = i+1
+        life = life - 1
+    for i in range(len(result)):
+        print(result[i],end='')
+    print()
+
+--------------------------------------------------------------------------------------
+
+민코딩 29.5 - 8번
+map_lst = [input().split() for _ in range(4)]
+direct_i = [0,1,0,-1,0]
+direct_j = [1,0,-1,0,1]
+A_di = 0
+A_dj = 0
+C_di = 0
+C_dj = 0
+D_di = 0
+D_dj = 0
+for i in range(4):
+    for j in range(3):
+        if map_lst[i][0][j] == 'A':
+            A_di = i
+            A_dj = j
+        elif map_lst[i][0][j] == 'C':
+            C_di = i
+            C_dj = j
+        elif map_lst[i][0][j] == 'D':
+            D_di = i
+            D_dj = j
+for i in range(5):
+    dy_A = A_di + direct_i[i]
+    dx_A = A_dj + direct_j[i]
+    if 0 <= dy_A < 4 and 0 <= dx_A < 3:
+        if map_lst[dy_A][0][dx_A] == '#' or map_lst[dy_A][0][dx_A] != '_':
+            continue
+        elif map_lst[dy_A][0][dx_A] != '#' and map_lst[dy_A][0][dx_A] == '_':
+            A_di = dy_A
+            A_dj = dx_A
+    dy_C = C_di + direct_i[i]
+    dx_C = C_dj + direct_j[i]
+    if 0 <= dy_C < 4 and 0 <= dx_C < 3:
+        if map_lst[dy_C][0][dx_C] == '#' or map_lst[dy_C][0][dx_C] != '_':
+            continue
+        elif map_lst[dy_C][0][dx_C] != '#' and map_lst[dy_C][0][dx_C] == '_':
+            C_di = dy_C
+            C_dj = dx_C
+    dy_D = D_di + direct_i[i]
+    dx_D = D_dj + direct_j[i]
+    if 0 <= dy_D < 4 and 0 <= dx_D < 3:
+        if map_lst[dy_D][0][dx_D] == '#' or map_lst[dy_D][0][dx_D] != '_':
+            continue
+        elif map_lst[dy_D][0][dx_D] != '#' and map_lst[dy_D][0][dx_D] == '_':
+            D_di = dy_D
+            D_dj = dx_D
+print(map_lst)
+
+--------------------------------------------------------------------------------------
+
+민코딩 29.5 - 9번
+lst1 = input()
+lst2 = input()
+def check(a):
+    for i in range(len(lst2)):
+        if lst1[a] != lst2[i]:
+for i in range(len(lst1)):
+    result = check(i)
+
+--------------------------------------------------------------------------------------
+
+민코딩 30 - 1번
+lst = [0,1,2,3,4,5]
+arr = [[0,0,1,1,0,1],
+       [0,0,0,1,1,1],
+       [0,0,0,0,1,1],
+       [0,0,0,0,0,0],
+       [1,0,0,0,0,1],
+       [0,0,0,0,0,0]]
+path = []
+used = [0]*6
+n = int(input())
+index = 0
+def dfs(now):
+    path.append(lst[now])
+    if now == 5:
+        return
+    for i in range(6):
+        if arr[now][i] == 1:
+            if used[i] == 0:
+                used[i] = 1
+                dfs(i)
+for i in range(len(lst)):
+    if lst[i] == n:
+        index = i
+used[index] = 1
+dfs(index)
+print(*path)
+
+--------------------------------------------------------------------------------------
+
+민코딩 30 - 2번
+lst = [0,1,2,3,4,5]
+arr = [[0,0,1,0,2,0],
+       [5,0,3,0,0,0],
+       [0,0,0,0,0,7],
+       [2,0,0,0,8,0],
+       [0,0,9,0,0,0],
+       [4,0,0,7,0,0]]
+start = int(input())
+used = [0]*6
+index = 0
+def dfs(now,sum):
+    print(f'{now} {sum}')
+
+    for i in range(6):
+        if arr[now][i] > 0:
+            if used[i] == 0:
+                used[i] = 1
+                dfs(i,sum+arr[now][i])
+                sum += arr[now][i]
+for i in range(len(lst)):
+    if lst[i] == start:
+        index = i
+used[index] = 1
+dfs(index,0)
+
+--------------------------------------------------------------------------------------
+
+민코딩 30 - 3번
+from collections import deque
+lst = [0,1,2,3,4,5]
+arr = [[0,1,0,0,1,0],
+       [0,0,1,0,0,1],
+       [0,0,0,1,0,0],
+       [0,0,0,0,0,0],
+       [0,0,0,0,0,0],
+       [0,0,0,0,0,0]]
+used = [0]*6
+path = []
+st = int(input())
+index = 0
+def bfs(st):
+    q = deque()
+    q.append(st)
+    while q:
+        now = q.popleft()
+        path.append(lst[now])
+        for i in range(6):
+            if arr[now][i] == 1:
+                if used[i] == 0:
+                    used[i] = 1
+                    q.append(i)
+for i in range(len(lst)):
+    if lst[i] == st:
+        index = i
+used[index] = 1
+bfs(index)
+print(*path)
+
+--------------------------------------------------------------------------------------
+
+민코딩 30 - 4번
+from collections import deque
+lst = [0,1,2,3,4,5]
+arr = [[0,0,0,0,1,0],
+       [1,0,1,0,0,1],
+       [1,0,0,1,0,0],
+       [1,1,0,0,0,0],
+       [0,1,0,1,0,1],
+       [0,0,1,1,0,0]]
+st = int(input())
+path = []
+used = [0]*6
+index = 0
+def dfs(st):
+    q = deque()
+    q.append(st)
+    while q:
+        now = q.popleft()
+        path.append(lst[now])
+        for i in range(6):
+            if arr[now][i] == 1:
+                if used[i] == 0:
+                    used[i] = 1
+                    q.append(i)
+for i in range(len(lst)):
+    if lst[i] == st:
+        index = i
+used[index] = 1
+dfs(index)
+for i in range(len(path)):
+    print(path[i])
+
+--------------------------------------------------------------------------------------
+
+민코딩 30.5 - 2번
+n = int(input())
+path = [0]*n
+lst = ['o','x']
+def abc(level):
+    if level == n:
+        for i in range(n):
+            print(path[i],end='')
+        print()
+        return
+    for i in range(2):
+        path[level] = lst[i]
+        abc(level+1)
+abc(0)
+
+--------------------------------------------------------------------------------------
+
+민코딩 30.5 - 3번
+1. sort 사용
+lst = [1,5,4,2,-5,-7]
+n = int(input())
+lst.sort(reverse=True)
+print(lst[n-1])
+
+2. 선택정렬 사용
+lst = [1,5,4,2,-5,-7]
+n = int(input())
+for i in range(5):
+    for j in range(i+1,6):
+        if lst[i] < lst[j]:
+            lst[i],lst[j] = lst[j],lst[i]
+print(lst[n-1])
+
+--------------------------------------------------------------------------------------
+
+민코딩 30.5 - 5번
+st = input()
+n = int(input())
+path = [0]*n
+def abc(level):
+    if level == n:
+        for i in range(n):
+            print(path[i],end='')
+        print()
+        return
+    for i in range(len(st)):
+        path[level] = st[i]
+        abc(level+1)
+abc(0)
+
+--------------------------------------------------------------------------------------
+
+민코딩 20.5 - 6번
+n = int(input())
+pwd = [input().split() for _ in range(n)]
+path = [0]*4
+lst = ['A','B','C','D','E','F','G','H','I',
+       'J','K','L','M','N','O','P','Q','R',
+       'S','T','U','V','W','X','Y','Z']
+arr = []
+def abc(level):
+    if level == 4:
+        lst1 = []
+        for i in range(len(path)):
+            lst1.append(path[i])
+        arr.append(lst1)
+        print(arr)
+        return
+    for i in range(26):
+        path[level] = lst[i]
+        abc(level+1)
+abc(0)
