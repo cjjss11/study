@@ -1,0 +1,286 @@
+SWEA
+13740 - 회문 (String)
+import sys
+sys.stdin = open('input.txt','r')
+T = int(input())
+for test_case in range(1, T + 1):
+    N, M = map(int,input().split())
+    arr1 = [list(input()) for _ in range(N)]
+    arr2 = []
+    for i in range(N):
+        lst = []
+        for j in range(N):
+            lst.append(arr1[j][i])
+        arr2.append(lst)
+    def horizon(a,b):
+        for j in range(M):
+            if arr1[a][b+j] != arr1[a][b+M-j-1]:
+                return 0
+        return 1
+    def vertical(a,b):
+        for j in range(M):
+            if arr2[a][b+j] != arr2[a][b+M-j-1]:
+                return 0
+        return 1
+    for i in range(N):
+        for j in range(N-M+1):
+            result1 = horizon(i,j)
+            result2 = vertical(i,j)
+            if result1:
+                print(f'#{test_case}', end=' ')
+                for k in range(j,j+M):
+                    print(arr1[i][k],end='')
+                print()
+            if result2:
+                print(f'#{test_case}', end=' ')
+                for k in range(j,j+M):
+                    print(arr2[i][k],end='')
+                print()
+
+---------------------------------------------------------------------------------------
+
+백준
+14696 - 딱지놀이
+import sys
+sys.stdin = open('input.txt','r')
+N = int(input())
+for i in range(N):
+    result = 0
+    A = list(map(int,input().split()))
+    B = list(map(int,input().split()))
+    A_lst = []
+    B_lst = []
+    for i in range(1,len(A)):
+        A_lst.append(A[i])
+    for i in range(1,len(B)):
+        B_lst.append(B[i])
+    for j in range(4,0,-1):
+        if A_lst.count(j) == B_lst.count(j):
+            continue
+        if A_lst.count(j) > B_lst.count(j):
+            result = 'A'
+            break
+        elif A_lst.count(j) < B_lst.count(j):
+            result = 'B'
+            break
+    if result == 0:
+        print('D')
+    else:
+        print(result)
+
+---------------------------------------------------------------------------------------
+
+백준
+2605번 - 줄세우기
+import sys
+sys.stdin = open('input.txt','r')
+student = int(input())
+lst = list(map(int,input().split()))
+st_lst = []
+for i in range(student):
+    st_lst.insert(i-lst[i],i+1)
+print(st_lst)
+
+---------------------------------------------------------------------------------------
+
+민코딩 21.5 - 3번
+st = list(input())
+a,b = input().split()
+index_a = 0
+index_b = 0
+for i in range(len(st)):
+    if st[i] == a:
+        index_a = i
+    if st[i] == b:
+        index_b = i
+if 0 <= index_a-1:
+    st[index_a-1] = '#'
+if index_a+1 < len(st):
+    st[index_a+1] = '#'
+if 0 <= index_b-1:
+    st[index_b-1] = '#'
+if index_b+1 < len(st):
+    st[index_b+1] = '#'
+for i in st:
+    print(i,end='')
+
+---------------------------------------------------------------------------------------
+
+민코딩 21.5 - 7번
+arr = [[0,0,0,0,0,0,0],
+       [0,0,1,0,1,0,0],
+       [0,1,2,0,2,1,0],
+       [0,0,1,2,1,0,0],
+       [0,0,2,1,0,1,0],
+       [0,1,1,0,0,0,0],
+       [0,0,0,0,0,0,0]] # 비어있는 곳은 0, 흰색 돌 1, 검은색 돌 2
+y,x = map(int,input().split())
+for i in range(7):
+    for j in range(7):
+        arr[y][x] = 1
+direct_i = [-1,1,0,0]
+direct_j = [0,0,-1,1]
+def check(a,b):
+    count1 = 0
+    for i in range(4):
+        di = a + direct_i[i]
+        dj = b + direct_j[i]
+        if 0 <= di < 7 and 0 <= dj < 7:
+            if arr[di][dj] == 1:
+                count1 += 1
+    if count1 == 4:
+        return 1
+    else:
+        return 0
+
+count2 = 0
+for i in range(7):
+    for j in range(7):
+        if arr[i][j] == 2:
+            result = check(i,j)
+            if result:
+                count2 += 1
+print(count2)
+
+---------------------------------------------------------------------------------------
+
+민코딩 21.5 - 5번
+vect = list(map(int,input().split()))
+bucket = [0]*20
+num_lst = []
+for i in range(len(vect)):
+    bucket[vect[i]] += 1
+for i in range(len(bucket)):
+    if bucket[i] != 0:
+        num_lst.append(str(i)*bucket[i])
+for i in range(len(num_lst)):
+    for j in range(len(num_lst[i])):
+        print(num_lst[i][j],end=' ')
+
+---------------------------------------------------------------------------------------
+
+민코딩 21.5 - 4번
+arr = [list(input()) for _ in range(4)]
+for i in range(3):
+    for j in range(3,-1,-1):
+        if arr[j][i] != '_':
+            if i == 3:
+                break
+            else:
+                if arr[-1][i] == '_':
+                    arr[-1][i] = arr[j][i]
+                    arr[j][i] = '_'
+                elif arr[-1][i] != '_':
+                    arr[-2][i] = arr[i][i]
+                    arr[j][i] = '_'
+for i in arr:
+    for j in i:
+        print(j,end='')
+    print()
+
+---------------------------------------------------------------------------------------
+
+민코딩 21.5 - 8번
+arr = [['_','_','_'],['_','_','_'],['A','T','K'],
+       ['_','_','_'],['_','_','_']]
+for i in range(7):
+    idx_i = 0
+    idx_j = 0
+    model,move = input().split()
+    for j in range(5):
+        for k in range(3):
+            if arr[j][k] == model:
+                idx_i = j
+                idx_j = k
+    if move == 'UP':
+        arr[idx_i-1][idx_j] = arr[idx_i][idx_j]
+        arr[idx_i][idx_j] = '_'
+    elif move == 'DOWN':
+        arr[idx_i+1][idx_j] = arr[idx_i][idx_j]
+        arr[idx_i][idx_j] = '_'
+    elif move == 'RIGHT':
+        arr[idx_i][idx_j+1] = arr[idx_i][idx_j]
+        arr[idx_i][idx_j] = '_'
+    elif move == 'LEFT':
+        arr[idx_i][idx_j-1] = arr[idx_i][idx_j]
+        arr[idx_i][idx_j] = '_'
+for i in arr:
+    for j in i:
+        print(j,end='')
+    print()
+
+---------------------------------------------------------------------------------------
+
+SWEA
+13789 - 괄호검사
+import sys
+sys.stdin = open('input.txt','r')
+T = int(input())
+for test_case in range(1, T + 1):
+    lst = list(input())
+    stack = []
+    def check():
+        for i in lst:
+            if i in '[{(':
+                stack.append(i)
+            elif i in ']})':
+                if len(stack) == 0:
+                    return 0
+                else:
+                    pair = stack.pop()
+                    if i == ')' and pair != '(' or i == '}' and pair != '{' or i == ']' and pair != '[':
+                        return 0
+        if len(stack) > 0:
+            return 0
+    result = check()
+    if result == 0:
+        print(f'#{test_case} {0}')
+    else:
+        print(f'#{test_case} {1}')
+
+---------------------------------------------------------------------------------------
+
+SWEA
+Ladder1
+import sys
+sys.stdin = open('input.txt','r')
+arr = [list(map(int,input().split())) for _ in range(100)]
+used = [[0]*100 for _ in range(100)]
+direct_i = [1,0,0]
+direct_j = [0,-1,-1]
+count = 0
+def dfs(y,x):
+    global count
+    if arr[y][x] == 2:
+        return
+    for i in range(3):
+
+---------------------------------------------------------------------------------------
+
+SWEA
+9386 - 연속한 1의 개수
+import sys
+sys.stdin = open('input.txt','r')
+T = int(input())
+for test_case in range(1, T + 1):
+    N = int(input())
+    lst = list(map(int,input()))
+    cnt_lst = []
+    cnt = 0
+    for i in range(len(lst)):
+        if lst[i] == 1:
+            cnt += 1
+            if i == len(lst)-1:
+                cnt_lst.append(cnt)
+        elif lst[i] == 0:
+            if cnt != 0:
+                cnt_lst.append(cnt)
+                cnt = 0
+            else:
+                continue
+    maxvalue = -21e8
+    for i in cnt_lst:
+        if i > maxvalue:
+            maxvalue = i
+    print(f'#{test_case} {maxvalue}')
+
