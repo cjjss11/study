@@ -1,0 +1,197 @@
+백준
+13300 - 방 배정
+import sys
+sys.stdin = open('input.txt','r')
+N,K = map(int,input().split())
+girls = [0]*7
+boys = [0]*7
+room = 0
+for i in range(N):
+    S,Y = map(int,input().split())
+    if S == 0:
+        girls[Y] += 1
+    elif S == 1:
+        boys[Y] += 1
+for i in range(7):
+    if girls[i] % K == 0:
+        room += girls[i]//K
+    else:
+        room += girls[i]//K + 1
+    if boys[i] % K == 0:
+        room += boys[i]//K
+    else:
+        room += boys[i]//K + 1
+print(room)
+
+--------------------------------------------------------------------------------------------------
+
+백준
+2578번 - 빙고
+import sys
+sys.stdin = open('input.txt','r')
+arr = [list(map(int,input().split())) for _ in range(10)]
+lst1 = [] # 철수 빙고판
+lst2 = [] # 사회자가 부를 숫자
+for i in range(5):
+    lst11 = []
+    for j in range(5):
+        lst11.append(arr[i][j])
+    lst1.append(lst11)
+for i in range(5,10):
+    for j in range(5):
+        lst2.append(arr[i][j])
+def Bingo(value):
+    for i in range(5):
+        for j in range(5):
+            if lst1[i][j] == value: # 사회자가 부른 숫자와 같으면
+                lst1[i][j] = 0 # 0 체크
+                return 0
+def bingo_check():
+    bingo = 0
+    for m in range(5): # 가로 체크
+        h_cnt = 0
+        for n in range(5):
+            if lst1[m][n] == 0:
+                h_cnt += 1
+        if h_cnt == 5:
+            bingo += 1
+    for m in range(5): # 세로 체크
+        v_cnt = 0
+        for n in range(5):
+            if lst1[n][m] == 0:
+                v_cnt += 1
+        if v_cnt == 5:
+            bingo += 1
+    c_cnt = 0
+    for m in range(5):
+        if lst1[m][m] == 0:
+            c_cnt += 1 # 오른쪽 아래 방향 대각선
+    if c_cnt == 5:
+        bingo += 1
+    cr_cnt = 0
+    for m in range(5):
+        if lst1[m][4-m] == 0:
+            cr_cnt += 1 # 왼쪽 아래 방향 대각선
+    if cr_cnt == 5:
+        bingo += 1
+    return bingo
+idx = 0
+for i in range(25):
+    Bingo(lst2[i])
+    if bingo_check() >= 3:
+        idx = i+1
+        break
+print(idx)
+
+--------------------------------------------------------------------------------------------------
+
+백준
+2635번 - 수 이어가기
+import sys
+sys.stdin = open('input.txt','r')
+N = int(input())
+maxvalue = -21e8
+num = 0
+for i in range(N-1,-1,-1):
+    lst = [N] # N값을 미리 넣고 값 담을 리스트 만들기
+    result = 0
+    n = 1
+    lst.append(i)
+    while result > -1:
+        for j in range(n,len(lst)):
+            result = lst[j-1] - lst[j] #앞의 앞의 수에서 앞의 수를 뺀 값
+            if result > -1:
+                lst.append(result) # 뺀 값이 양수이면 리스트에 담기
+                n += 1
+            else:
+                break
+    if len(lst) > maxvalue: # 리스트 안에 원소 개수가 maxvalue 보다 크면
+        maxvalue = len(lst) # maxvalue 갱신
+        num = i # lst 원소 개수가 최대일 때 두번째 값 갱신
+print(maxvalue)
+answer = [N,num]
+for i in range(2,maxvalue):
+    answer.append(answer[i-2]-answer[i-1])
+print(*answer)
+
+--------------------------------------------------------------------------------------------------
+
+백준
+1244번 - 스위치 켜고 끄기
+import sys
+sys.stdin = open('input.txt','r')
+n = int(input())
+switch = list(map(int,input().split()))
+student = int(input())
+idx = []
+for i in range(student):
+    gene,num = map(int,input().split())
+    if gene == 1:
+        for j in range(len(switch)):
+            if (j+1) % num == 0:
+                if switch[j] == 1:
+                    switch[j] = 0
+                elif switch[j] == 0:
+                    switch[j] = 1
+    elif gene == 2:
+        num2 = num - 1 # 뽑은 스위치 번호의 인덱스
+        if switch[num2-1] == switch[num2+1]: # 뽑은 스위치 번호의 왼쪽 값과 오른쪽 값이 같으면
+            for j in range(len(switch)):
+                if switch[j] == switch[num2*2-j]: # 대칭되는 번호들의 값이 같은 경우
+                    if j == num2:
+                        break
+                    idx.append(j) # idx 리스트에 인덱스 담기
+            for j in range(idx[0],num2*2-idx[0]+1): # 대칭되는 값들의 범위
+                if switch[j] == 0:
+                    switch[j] = 1
+                elif switch[j] == 1:
+                    switch[j] = 0
+        elif switch[num2-1] != switch[num2+1]: # 뽑은 스위치의 왼쪽 값과 오른쪽 값이 다른 경우
+            if switch[num2] == 0: # 뽑은 스위치의 값을 바꿈
+                switch[num2] = 1
+            elif switch[num2] == 1:
+                switch[num2] = 0
+print(*switch)
+
+--------------------------------------------------------------------------------------------------
+
+백준
+2559번 - 수열
+import sys
+sys.stdin = open('input.txt','r')
+N,K = map(int,input().split())
+temp = list(map(int,input().split()))
+maxvalue = -21e8
+result = 0
+for i in range(N-1):
+    result = temp[i] + temp[i+1]
+    if result > maxvalue:
+        maxvalue = result
+print(maxvalue)
+
+--------------------------------------------------------------------------------------------------
+
+백준
+2628번 - 종이 자르기
+import sys
+sys.stdin = open('input.txt','r')
+w,h = map(int,input().split())
+N = int(input())
+width = [0,w]
+height = [0,h]
+for i in range(N):
+    n1, n2 = map(int,input().split())
+    if n1 == 0: # 가로이면
+        height.append(n2) # 세로 리스트에 담기
+    elif n1 == 1: # 세로이면
+        width.append(n2) # 가로 리스트에 담기
+width.sort()
+height.sort()
+maxvalue = -21e8
+result = 0
+for i in range(len(width)-1):
+    for j in range(len(height)-1):
+        result = (width[i+1] - width[i]) * (height[j+1] - height[j]) # 넓이 구하기
+        if result > maxvalue:
+            maxvalue = result
+print(maxvalue)
