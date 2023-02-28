@@ -1,0 +1,181 @@
+백준
+2699번 - 직사각형 네개의 합집합의 면적 구하기
+import sys
+sys.stdin = open('input.txt','r')
+arr = [[0]*100 for _ in range(100)]
+for i in range(4):
+    dx1,dy1,dx2,dy2 = map(int,input().split())
+    for i in range(dy1,dy2):
+        for j in range(dx1,dx2):
+            arr[i][j] = 1
+cnt = 0
+for i in range(100):
+    for j in range(100):
+        if arr[i][j] == 1:
+            cnt += 1
+print(cnt)
+
+----------------------------------------------------------------------------------------------------
+
+백준
+2563번 - 색종이
+import sys
+sys.stdin = open('input.txt','r')
+N = int(input())
+arr = [[0]*100 for _ in range(100)]
+for i in range(N):
+    dx,dy = map(int,input().split())
+    for i in range(dy,dy+10):
+        for j in range(dx,dx+10):
+            arr[i][j] = 1
+cnt = 0
+for i in range(100):
+    for j in range(100):
+        if arr[i][j] == 1:
+            cnt += 1
+print(cnt)
+
+----------------------------------------------------------------------------------------------------
+
+백준
+14696번 - 딱지놀이
+import sys
+sys.stdin = open('input.txt','r')
+N = int(input())
+for i in range(N):
+    A = list(map(int,input().split()))
+    B = list(map(int,input().split()))
+    A_card = []
+    B_card = []
+    result = 0
+    for j in range(1,len(A)):
+        A_card.append(A[j])
+    for j in range(1,len(B)):
+        B_card.append(B[j])
+    for j in range(4,0,-1):
+        if A_card.count(j) == B_card.count(j):
+            continue
+        elif A_card.count(j) > B_card.count(j):
+            result = 'A'
+            break
+        elif A_card.count(j) < B_card.count(j):
+            result = 'B'
+            break
+    if result == 0:
+        print('D')
+    else:
+        print(result)
+
+----------------------------------------------------------------------------------------------------
+
+백준
+13300번 - 방 배정
+import sys
+sys.stdin = open('input.txt','r')
+N,K = map(int,input().split())
+girls = [0]*7
+boys = [0]*7
+for i in range(N):
+    S,Y = map(int,input().split())
+    if S == 0:
+        girls[Y] += 1
+    elif S == 1:
+        boys[Y] += 1
+room = 0
+for i in range(7):
+    if girls[i] % K == 0:
+        room += girls[i]//K
+    elif girls[i] % K == 1:
+        room += girls[i]//K + 1
+    if boys[i] % K == 0:
+        room += boys[i]//K
+    elif boys[i] % K == 1:
+        room += boys[i]//K + 1
+print(room)
+
+----------------------------------------------------------------------------------------------------
+
+백준
+2628번 - 종이자르기
+import sys
+sys.stdin = open('input.txt','r')
+width,height = map(int,input().split())
+N = int(input())
+w_lst = [0,width]
+h_lst = [0,height]
+for i in range(N):
+    n1,n2 = map(int,input().split())
+    if n1 == 0:
+        h_lst.append(n2)
+    elif n1 == 1:
+        w_lst.append(n2)
+w_lst.sort()
+h_lst.sort()
+maxvalue = -21e8
+result = 0
+for i in range(len(w_lst)-1):
+    for j in range(len(h_lst)-1):
+        result = (w_lst[i+1]-w_lst[i])*(h_lst[j+1]-h_lst[j])
+        if result > maxvalue:
+            maxvalue = result
+print(maxvalue)
+
+----------------------------------------------------------------------------------------------------
+
+백준
+2564번 - 경비원
+import sys
+sys.stdin = open('input.txt','r')
+width,height = map(int,input().split())
+store = int(input())
+arr = [[0]*(width+1) for _ in range(height+1)]
+for i in range(store):
+    direction,location = map(int,input().split())
+    if direction == 1:
+        arr[0][location] = 1
+    elif direction == 2:
+        arr[-1][location] = 1
+    elif direction == 3:
+        arr[location][0] = 1
+    elif direction == 4:
+        arr[location][-1] = 1
+d_dir,d_loc = map(int,input().split())
+if d_dir == 1:
+    di = 0
+    dj = d_loc
+elif d_dir == 2:
+    di = height
+    dj = d_loc
+elif d_dir == 3:
+    di = d_loc
+    dj = 0
+elif d_dir == 4:
+    di = d_loc
+    dj = width
+sum = 0
+total = width*2 + height*2
+for i in range(height+1):
+    for j in range(width+1):
+        if arr[i][j] == 1:
+            if di == i:
+                if dj > j:
+                    clock = dj - j
+                    r_clock = total - clock
+                elif dj < j:
+                    r_clock = j - dj
+                    clock = total - r_clock
+            elif dj == j:
+                if di > i:
+                    clock = di - i
+                    r_clock = total - clock
+                elif di < i:
+                    r_clock = i - di
+                    clock = total - r_clock
+            else:
+                clock = dj + abs(i - di) + j
+                r_clock = total - clock
+            if clock > r_clock:
+                sum += r_clock
+            elif clock < r_clock:
+                sum += clock
+print(sum)
