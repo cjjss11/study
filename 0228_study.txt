@@ -1,0 +1,81 @@
+백준
+1244번 - 스위치 켜고 끄기
+import sys
+sys.stdin = open('input.txt','r')
+n = int(input())
+switch = list(map(int,input().split()))
+student = int(input())
+for i in range(student):
+    gene,num = map(int,input().split())
+    if gene == 1:
+        for j in range(len(switch)):
+            if (j+1) % num == 0:
+                if switch[j] == 1:
+                    switch[j] = 0
+                elif switch[j] == 0:
+                    switch[j] = 1
+    elif gene == 2:
+        idx = []
+        num2 = num - 1 # 뽑은 스위치 번호의 인덱스
+        if num2 == 0: # num2가 0이면 대칭이 없는 것이므로
+            if switch[num2] == 0:
+                switch[num2] = 1
+            elif switch[num2] == 1:
+                switch[num2] = 0
+        else:
+            if num2-1 < 0 or num2+1 >= len(switch): # 뽑은 스위치 양쪽이 범위를 벗어난 경우
+                if switch[num2] == 0:
+                    switch[num2] = 1
+                elif switch[num2] == 1:
+                    switch[num2] = 0
+            else:
+                if switch[num2-1] == switch[num2+1]: # 뽑은 스위치 번호의 왼쪽 값과 오른쪽 값이 같으면
+                    for j in range(len(switch)):
+                        if (num2*2-j) >= len(switch): # 대칭되는 인덱스가 switch 길이보다 크면
+                            continue
+                        if switch[j] == switch[num2*2-j]: # 대칭되는 번호들의 값이 같은 경우
+                            if j == num2:
+                                break
+                            idx.append(j) # idx 리스트에 인덱스 담기
+                    for j in range(idx[0],num2*2-idx[0]+1): # 대칭되는 번호 범위에서 값 바꾸기
+                        if switch[j] == 0:
+                            switch[j] = 1
+                        elif switch[j] == 1:
+                            switch[j] = 0
+                elif switch[num2-1] != switch[num2+1]: # 뽑은 스위치의 왼쪽 값과 오른쪽 값이 다른 경우
+                    if switch[num2] == 0: # 뽑은 스위치의 값을 바꿈
+                        switch[num2] = 1
+                    elif switch[num2] == 1:
+                        switch[num2] = 0
+for i in range(0,len(switch),20):
+    print(*switch[i:i+20])
+
+---------------------------------------------------------------------------------------------------
+
+SWEA
+1288 - 새로운 불면증 치료법
+import sys
+sys.stdin = open('input.txt','r')
+T = int(input())
+for test_case in range(1, T + 1):
+    N = int(input())
+    lst1 = []
+    lst2 = [0,1,2,3,4,5,6,7,8,9]
+    num = 1
+    while 1:
+        a = str(N * num) # N에 횟수 곱한 것을 문자열로 변환
+        for i in range(len(a)): # 각 자리수를 lst1에 담기
+            result = int(a) % 10
+            if result not in lst1:
+                lst1.append(result)
+            a = int(a) // 10
+        num += 1
+        lst1.sort()
+        if len(lst1) == 10:
+            for i in range(10):
+                if lst1[i] == lst2[i]: # lst1과 lst2가 같은지 비교
+                    pass
+            break
+        else:
+            continue
+    print(f'#{test_case} {N*(num-1)}') # 횟수만 출력하는 것이 아닌 N 곱한 값을 출력
