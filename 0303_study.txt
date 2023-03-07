@@ -1,0 +1,373 @@
+백준
+2564번 - 경비원
+1. 직사각형 둘레만큼 0으로 초기화한 1차원 리스트를 만들어서 사용
+상점 위치와 동근이 위치를 따로 받아 사용
+import sys
+sys.stdin = open('input.txt','r')
+width,height = map(int,input().split())
+N = int(input())
+result = width*2 + height*2
+arr = [0]*result
+for i in range(N):
+    direction,location = map(int,input().split())
+    answer = 0 # 일자로 만들어 값을 넣기 위한 변수
+    if direction == 1: # 북
+        answer = height*2 + width + (width-location)
+        arr[answer] = i+1
+    elif direction == 2: # 남
+        answer = height + location
+        arr[answer] = i+1
+    elif direction == 3: # 서
+        answer = location
+        arr[answer] = i+1
+    elif direction == 4: # 동
+        answer = width + height + (height-location)
+        arr[answer] = i+1
+d_dir,d_loc = map(int,input().split())
+d_answer = 0
+if d_dir == 1:
+    d_answer = height * 2 + width + (width - d_loc)
+    arr[d_answer] = '*'
+elif d_dir == 2:
+    d_answer = height + d_loc
+    arr[d_answer] = '*'
+elif d_dir == 3:
+    d_answer = d_loc
+    arr[d_answer] = '*'
+elif d_dir == 4:
+    d_answer = width + height + (height - d_loc)
+    arr[d_answer] = '*'
+d_idx = 0 # 동근이 위치
+for i in range(len(arr)):
+    if arr[i] == '*':
+        d_idx = i
+sum = 0
+for i in range(N):
+    clock = 0
+    r_clock = 0
+    for j in range(len(arr)):
+        if arr[j] == i+1:
+            if j > d_idx:
+                clock = d_idx + len(arr) - j
+                r_clock = abs(d_idx-j)
+                if clock >= r_clock: # 등호 조심...
+                    sum += r_clock
+                elif r_clock > clock:
+                    sum += clock
+            elif j < d_idx:
+                clock = d_idx - j
+                r_clock = j + len(arr) - d_idx
+                if clock >= r_clock: # 등호...
+                    sum += r_clock
+                elif r_clock > clock:
+                    sum += clock
+print(sum)
+
+2. 빈 리스트를 만들어 1번 방법에서 표현했던 상점 위치의 인덱스를 리스트에 담아서 사용
+상점 위치와 동근이 위치를 한번에 입력 받음
+최단 거리 합에서 min 함수 사용하지 않고 합 구함
+width,height = map(int,input().split())
+N = int(input())
+arr = []
+result = width*2 + height*2
+answer = 0
+for i in range(N+1):
+    direction,location = map(int,input().split())
+    answer = 0 # 일자로 만들어 값을 넣기 위한 변수
+    if direction == 1: # 북
+        answer = height*2 + width + (width-location)
+        arr.append(answer)
+    elif direction == 2: # 남
+        answer = height + location
+        arr.append(answer)
+    elif direction == 3: # 서
+        answer = location
+        arr.append(answer)
+    elif direction == 4: # 동
+        answer = width + height + (height-location)
+        arr.append(answer)
+sum = 0 # 최단 거리 합
+for i in range(len(arr)):
+    clock = 0 # 시계 방향
+    r_clock = 0 # 반시계 방향
+    if arr[i] > arr[-1]:
+        clock = (result - arr[i]) + arr[-1]
+        r_clock = arr[i] - arr[-1] # result - clock
+        if clock >= r_clock: # 등호...
+            sum += r_clock
+        elif clock < r_clock:
+            sum += clock
+    elif arr[i] < arr[-1]:
+        clock = arr[-1] - arr[i]
+        r_clock = arr[i] + (result - arr[-1]) # result - clock
+        if clock >= r_clock: # 등호...
+            sum += r_clock
+        elif clock < r_clock:
+            sum += clock
+print(sum)
+
+3. 2번 방법이랑 똑같이 하고 최단 거리 합에서 min 함수 사용해서 구함
+width,height = map(int,input().split())
+N = int(input())
+arr = []
+result = width*2 + height*2
+answer = 0
+for i in range(N+1):
+    direction,location = map(int,input().split())
+    answer = 0 # 일자로 만들어 값을 넣기 위한 변수
+    if direction == 1: # 북
+        answer = height*2 + width + (width-location)
+        arr.append(answer)
+    elif direction == 2: # 남
+        answer = height + location
+        arr.append(answer)
+    elif direction == 3: # 서
+        answer = location
+        arr.append(answer)
+    elif direction == 4: # 동
+        answer = width + height + (height-location)
+        arr.append(answer)
+minvalue = 0
+for i in range(len(arr)):
+    if arr[i] > arr[-1]:
+        minvalue += min(arr[i]-arr[-1], arr[-1]+result-arr[i])
+    elif arr[i] < arr[-1]:
+        minvalue += min(arr[-1]-arr[i], arr[i]+result-arr[-1])
+print(minvalue)
+
+---------------------------------------------------------------------------------------------------
+
+SWEA
+성공적인 공연 기획
+import sys
+sys.stdin = open('input.txt','r')
+T = int(input())
+for test_case in range(1, T + 1):
+    clap_lst = list(map(int,input()))
+    clap = clap_lst[0]
+    result = 0
+    idx = 1
+    while 1:
+        if idx == len(clap_lst):
+            break
+        if clap >= idx:
+            clap += clap_lst[idx]
+            idx += 1
+        else:
+            result += 1
+            clap += 1
+    print(f'#{test_case} {result}')
+
+---------------------------------------------------------------------------------------------------
+
+백준
+1244번 - 스위치 켜고 끄기
+import sys
+sys.stdin = open('input.txt','r')
+N = int(input())
+switch = list(map(int,input().split()))
+student = int(input())
+for i in range(student):
+    gene,num = map(int,input().split())
+    if gene == 1:
+        for j in range(len(switch)):
+            if (j+1) % num == 0:
+                if switch[j] == 0:
+                    switch[j] = 1
+                elif switch[j] == 1:
+                    switch[j] = 0
+    elif gene == 2:
+        num2 = num - 1
+        if switch[num2] == 0:
+            switch[num2] = 1
+        elif switch[num2] == 1:
+            switch[num2] = 0
+        idx = 1
+        while 1:
+            if num2-idx >= 0 and num2+idx < len(switch):
+                if switch[num2-idx] == switch[num2+idx]:
+                    if switch[num2-idx] == 0:
+                        switch[num2-idx] = 1
+                    elif switch[num2-idx] == 1:
+                        switch[num2-idx] = 0
+                    if switch[num2+idx] == 0:
+                        switch[num2+idx] = 1
+                    elif switch[num2+idx] == 1:
+                        switch[num2+idx] = 0
+                    idx += 1
+                else:
+                    break
+            else:
+                break
+for i in range(0,len(switch),20):
+    print(*switch[i:i+20])
+
+---------------------------------------------------------------------------------------------------
+
+백준
+13300번 - 방 배정
+import sys
+sys.stdin = open('input.txt','r')
+N,K = map(int,input().split())
+girls = [0]*7
+boys = [0]*7
+for i in range(N):
+    gene,grade = map(int,input().split())
+    if gene == 0:
+        girls[grade] += 1
+    elif gene == 1:
+        boys[grade] += 1
+room = 0
+for i in range(len(girls)):
+    if girls[i] % K == 0:
+        room += girls[i] // K
+    elif girls[i] % K == 1:
+        room += girls[i] // K + 1
+for i in range(len(boys)):
+    if boys[i] % K == 0:
+        room += boys[i] // K
+    elif boys[i] % K == 1:
+        room += boys[i] // K + 1
+print(room)
+
+---------------------------------------------------------------------------------------------------
+
+백준
+14696번 - 딱지놀이
+import sys
+sys.stdin = open('input.txt','r')
+round = int(input())
+for i in range(round):
+    A = list(map(int,input().split()))
+    B = list(map(int,input().split()))
+    A_card = []
+    B_card = []
+    for j in range(1,len(A)):
+        A_card.append(A[j])
+    for j in range(1,len(B)):
+        B_card.append(B[j])
+    result = 0
+    for j in range(4,0,-1):
+        if A_card.count(j) == B_card.count(j):
+            continue
+        elif A_card.count(j) > B_card.count(j):
+            result = 'A'
+            break
+        elif A_card.count(j) < B_card.count(j):
+            result = 'B'
+            break
+    if result == 0:
+        print('D')
+    else:
+        print(result)
+
+---------------------------------------------------------------------------------------------------
+
+백준
+2309번 - 일곱 난쟁이
+import sys
+sys.stdin = open('input.txt','r')
+height = []
+for i in range(9):
+    num = int(input())
+    height.append(num)
+total_sum = 0
+for i in range(len(height)):
+    total_sum += height[i]
+sum = total_sum - 100
+for i in range(8):
+    a = height[i]
+    for j in range(i+1,9):
+        b = height[j]
+        if a + b == sum:
+            height.remove(a)
+            height.remove(b)
+            break
+    if len(height) == 7:
+        break
+height.sort()
+print(*height)
+
+---------------------------------------------------------------------------------------------------
+
+백준
+2635번 - 수 이어가기
+import sys
+sys.stdin = open('input.txt','r')
+N = int(input())
+maxvalue = -21e8
+num = 0
+for i in range(1, N+1):
+    lst = [N]
+    idx = 0
+    result = 0
+    lst.append(i)
+    while result > -1:
+        result = lst[idx] - lst[idx+1]
+        if result > -1:
+            lst.append(result)
+            idx += 1
+        else:
+            break
+    if len(lst) > maxvalue:
+        maxvalue = len(lst)
+        num = i
+print(maxvalue)
+answer = [N,num]
+for i in range(2,maxvalue):
+    answer.append(answer[i-2]-answer[i-1])
+print(*answer)
+
+---------------------------------------------------------------------------------------------------
+
+백준
+2567번 - 색종이 2
+import sys
+sys.stdin = open('input.txt','r')
+N = int(input())
+arr = [[0]*100 for _ in range(100)]
+for i in range(N):
+    dx,dy = map(int,input().split())
+    for j in range(dy,dy+10):
+        for k in range(dx,dx+10):
+            arr[j][k] = 1
+    for j in range(dy+1,dy+9):
+        for k in range(dx+1,dx+9):
+            arr[j][k] = 0
+for i in arr:
+    for j in i:
+        print(j,end=' ')
+    print()
+
+---------------------------------------------------------------------------------------------------
+
+import sys
+sys.stdin = open('input.txt','r')
+N = int(input())
+lst = list(map(int,input().split()))
+cnt = 1
+cnt_lst = []
+idx = []
+for i in range(len(lst)-1): # 오름차순
+    if lst[i] <= lst[i+1]:
+        cnt += 1
+        a = lst[i]
+        lst.remove(a)
+    elif lst[i] >= lst[i+1]:
+        if cnt != 1:
+            cnt_lst.append(cnt)
+            cnt = 1
+idx.sort(reverse=True)
+for i in idx:
+    lst.pop(i)
+idx = []
+for i in range(len(lst)-1): # 내림차순
+    if lst[i] >= lst[i+1]:
+        cnt += 1
+        a = lst[i]
+        lst.remove(a)
+    elif lst[i] <= lst[i+1]:
+        if cnt != 1:
+            cnt_lst.append(cnt)
+            cnt = 1
+print(cnt_lst)
