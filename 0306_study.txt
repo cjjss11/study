@@ -1,0 +1,305 @@
+백준
+2527번 - 직사각형
+import sys
+sys.stdin = open('input.txt','r')
+for _ in range(4):
+    sx1,sy1,ex1,ey1,sx2,sy2,ex2,ey2, = map(int,input().split())
+    if sx1 > ex2 or sx2 > ex1 or sy1 > ey2 or sy2 > ey1:
+        ans = 'd'
+    elif sy1 == ey2 or sy2 == ey1:
+        if sx1 == ex2 or sx2 == ex1:
+            ans = 'c'
+    elif sx1 == ex2 or sx2 == ex1:
+        ans = 'b'
+    else:
+        ans = 'a'
+    print(ans)
+
+----------------------------------------------------------------------------------------------------
+
+백준
+2304번 - 창고 다각형
+import sys
+sys.stdin = open('input.txt','r')
+N = int(input())
+lst = [0]*1001
+maxvalue = -21e8
+max_i = 0
+for _ in range(N):
+    L,H = map(int,input().split())
+    lst[L] = H
+    if H > maxvalue:
+        maxvalue = H
+        max_i = L
+max_L = 0
+max_R = 0
+answer = 0
+for i in range(max_i+1):
+    max_L = max(max_L,lst[i])
+    answer += max_L
+for i in range(1000,max_i,-1):
+    max_R = max(max_R,lst[i])
+    answer += max_R
+print(answer)
+
+----------------------------------------------------------------------------------------------------
+
+백준
+10157번 - 자리배정
+import sys
+sys.stdin = open('input.txt','r')
+C,R = map(int,input().split())
+K = int(input())
+arr = [[1]*(C+2)]+[[1]+[0]*C+[1] for _ in range(R)]+[[1]*(C+2)]
+if C*R < K:
+    print(0)
+else:
+    direct_i = [1,0,-1,0]
+    direct_j = [0,1,0,-1]
+    y,x = 1,1
+    dr = 0
+    for i in range(1,K):
+        arr[y][x] = i
+        dy = y + direct_i[dr]
+        dx = x + direct_j[dr]
+        if arr[dy][dx] == 0:
+            y,x = dy,dx
+        else:
+            dr = (dr+1) % 4
+            y = y + direct_i[dr]
+            x = x + direct_j[dr]
+    print(f'{x} {y}')
+
+----------------------------------------------------------------------------------------------------
+
+백준
+2567번 - 색종이2
+import sys
+sys.stdin = open('input.txt','r')
+arr = [[0]*101 for _ in range(101)]
+N = int(input())
+for _ in range(N):
+    dx,dy = map(int,input().split())
+    for i in range(dy,dy+10):
+        for j in range(dx,dx+10):
+            arr[i][j] = 1
+r_arr = []
+for i in range(101):
+    lst = []
+    for j in range(101):
+        lst.append(arr[i][j])
+    r_arr.append(lst)
+def count(arr):
+    cnt = 0
+    for lst in arr:
+        for i in range(1,len(lst)):
+            if lst[i-1] != lst[i]:
+                cnt += 1
+    return cnt
+answer = count(arr) + count(r_arr)
+print(answer)
+
+----------------------------------------------------------------------------------------------------
+
+SWEA
+4613 - 러시아 국기 같은 깃발
+import sys
+sys.stdin = open('input.txt','r')
+T = int(input())
+for test_case in range(1, T + 1):
+    N,M = map(int,input().split())
+    arr = [list(input()) for _ in range(N)]
+
+    def color(W,B,R):
+        cnt = 0
+        for i in range(N):
+            for j in range(M):
+                if 0 <= i < W:
+                    if arr[i][j] != 'W':
+                        cnt += 1
+                elif 0 <= i < W+B:
+                    if arr[i][j] != 'B':
+                        cnt += 1
+                elif 0 <= i < W+B+R:
+                    if arr[i][j] != 'R':
+                        cnt += 1
+        return cnt
+
+    minvalue = 21e8
+    for i in range(1,N-1):
+        for j in range(1,N-1):
+            for k in range(1,N-1):
+                if i + j + k == N:
+                    result = color(i,j,k)
+                    if result < minvalue:
+                        minvalue = result
+    print(f'#{test_case} {minvalue}')
+
+----------------------------------------------------------------------------------------------------
+
+백준
+2798번 - 블랙잭
+import sys
+sys.stdin = open('input.txt','r')
+N,M = map(int,input().split())
+card = list(map(int,input().split()))
+sum = 0
+maxvalue = 0
+for i in range(N-2):
+    for j in range(i+1,N-1):
+        for k in range(j+1,N):
+            if card[i]+card[j]+card[k] <= M:
+                sum = card[i]+card[j]+card[k]
+                if sum > maxvalue:
+                    maxvalue = sum
+print(maxvalue)
+
+----------------------------------------------------------------------------------------------------
+
+백준
+3985번 - 롤 케이크
+import sys
+sys.stdin = open('input.txt','r')
+L = int(input())
+N = int(input())
+max1 = -21e8
+max1_i = 0
+max2 = -21e8
+max2_i = 0
+cake = [1]*(L+1)
+for i in range(N):
+    P,K = map(int,input().split())
+    if (K-P) == max1:
+        if max1_i > i+1:
+            max1_i = i+1
+    elif (K-P) > max1:
+        max1 = (K-P)
+        max1_i = i+1
+    cnt = 0
+    for j in range(P,K+1):
+        if cake[j] == 1:
+            cnt += 1
+            cake[j] = 0
+    if cnt > max2:
+        max2 = cnt
+        max2_i = i+1
+print(max1_i)
+print(max2_i)
+
+----------------------------------------------------------------------------------------------------
+
+SWEA
+9490 - 풍선팡
+import sys
+sys.stdin = open('input.txt','r')
+T = int(input())
+for test_case in range(1,T+1):
+    N,M = map(int,input().split())
+    arr = [list(map(int,input().split())) for _ in range(N)]
+    def balloon(a,b):
+        sum = arr[a][b]
+        direct_i = [-1,0,1,0]
+        direct_j = [0,1,0,-1]
+        for i in range(4):
+            for j in range(1,arr[a][b]+1):
+                dy = a + direct_i[i] * j
+                dx = b + direct_j[i] * j
+                if 0 <= dy < N and 0 <= dx < M:
+                    sum += arr[dy][dx]
+        return sum
+
+    maxvalue = -21e8
+    for i in range(N):
+        for j in range(M):
+            result = balloon(i,j)
+            if result > maxvalue:
+                maxvalue = result
+    print(f'#{test_case} {maxvalue}')
+
+----------------------------------------------------------------------------------------------------
+
+SWEA
+16811 - 당근 포장하기
+import sys
+sys.stdin = open('input.txt','r')
+T = int(input())
+for tc in range(1, T + 1):
+    N = int(input())
+    arr = list(map(int, input().split()))
+    # 오름차순 정렬 후
+    arr.sort()
+    minV = 1000
+    for i in range(N - 2):  # 소 박스
+        for j in range(i + 1, N - 1):  # 중 박스
+            if arr[i] != arr[i + 1] and arr[j] != arr[j + 1]:  # 같은 크기가 다른 박스에 들어가는 경우 제외
+                A = i + 1
+                B = j - i
+                C = N - 1 - j
+                if A * B * C != 0 and A <= N // 2 and B <= N // 2 and C <= N // 2:  # 빈 박스 없고 절반 초과하는 박스도 없으면
+                    if minV > max(A, B, C) - min(A, B, C):
+                        minV = max(A, B, C) - min(A, B, C)
+    if minV == 1000:  # 포장할 수 없는 경우
+        minV = -1
+    print(f'#{tc} {minV}')
+
+----------------------------------------------------------------------------------------------------
+
+SWEA
+1954 - 달팽이 숫자
+import sys
+sys.stdin = open('input.txt','r')
+T = int(input())
+for test_case in range(1,T+1):
+    N = int(input())
+    arr = [[1]*(N+2)]+[[1]+[0]*N+[1] for _ in range(N)]+[[1]*(N+2)]
+    y,x = 1,1
+    direct_i = [0,1,0,-1]
+    direct_j = [1,0,-1,0]
+    dr = 0
+    for i in range(1,(N*N)+1):
+        arr[y][x] = i
+        dy = y + direct_i[dr]
+        dx = x + direct_j[dr]
+        if arr[dy][dx] == 0:
+            y,x = dy,dx
+        else:
+            dr = (dr+1) % 4
+            y = y + direct_i[dr]
+            x = x + direct_j[dr]
+    print(f'#{test_case}')
+    for i in range(1,N+1):
+        for j in range(1,N+1):
+            print(arr[i][j],end=' ')
+        print()
+
+----------------------------------------------------------------------------------------------------
+
+백준
+8320번 - 직사각형을 만드는 방법
+import sys
+sys.stdin = open('input.txt','r')
+n = int(input())
+cnt = 0
+for i in range(1,n+1):
+    for j in range(i,n+1):
+        if i*j <= n:
+            cnt += 1
+print(cnt)
+
+----------------------------------------------------------------------------------------------------
+
+백준
+10431번 - 줄세우기
+import sys
+sys.stdin = open('input.txt','r')
+P = int(input())
+for _ in range(P):
+    cnt = 0
+    lst = list(map(int,input().split()))
+    for i in range(2,21):
+        for j in range(1,i):
+            if lst[i] < lst[j]:
+                cnt += 1
+    print(lst[0],end=' ')
+    print(cnt)
+
